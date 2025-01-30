@@ -14,4 +14,4 @@ minio:
   endpoint: http://127.0.0.1:9000
   user: admin
   password: admin
-  bucket-name: user-files
+  bucket: user-files

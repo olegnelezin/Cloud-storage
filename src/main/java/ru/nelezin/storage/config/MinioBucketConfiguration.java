@@ -1,33 +1,31 @@
 package ru.nelezin.storage.config;
 
 import jakarta.annotation.PostConstruct;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import ru.nelezin.storage.service.MinioService;
 
-@Setter
-@Getter
 @RequiredArgsConstructor
 @Configuration
 public class MinioBucketConfiguration {
 
-    @Value("${minio.bucket-name}")
-    private String bucketName;
+    @Value("${minio.bucket}")
+    private String bucket;
 
     private final MinioService minioService;
 
     @PostConstruct
     public void createBucket() {
         try {
-            if (!minioService.isBucketExists(bucketName)) {
-                minioService.createBucket(bucketName);
+            if (!minioService.isBucketExists(bucket)) {
+                minioService.createBucket(bucket);
             }
         }
         catch (Exception e) {
-            throw new RuntimeException("Bucket '" + bucketName + "' is not created", e);
+            throw new RuntimeException("Bucket '" + bucket + "' is not created", e);
         }
     }
 }
