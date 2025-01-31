@@ -49,9 +49,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByLoginAndPassword(String login, String password) {
-        String passwordHash = passwordEncoder.encode(password);
-        return userRepository.findByLoginAndPasswordHash(login, passwordHash).orElseThrow(
-                () -> new RuntimeException("f"));
+        User user = userRepository.findByLogin(login).orElseThrow(
+                () -> new RuntimeException("User does not exists"));
+
+        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
+            throw new RuntimeException("Incorrect password");
+        }
+
+        return user;
     }
 
     @Override
@@ -60,7 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
 }

@@ -17,7 +17,7 @@ public class MinioBucketConfiguration {
 
     private final MinioService minioService;
 
-    @PostConstruct
+    //@PostConstruct
     public void createBucket() {
         try {
             if (!minioService.isBucketExists(bucket)) {

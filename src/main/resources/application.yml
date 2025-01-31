@@ -6,12 +6,15 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: "org.hibernate.dialect.PostgreSQLDialect"
 minio:
-  endpoint: http://127.0.0.1:9000
+  endpoint: http://localhost:9000
   user: admin
   password: admin
   bucket: user-files
+logging:
+  level:
+    org.springframework.security: DEBUG

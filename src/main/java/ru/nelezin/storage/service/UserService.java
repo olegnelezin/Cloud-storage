@@ -16,5 +16,5 @@ public interface UserService {
 
     boolean isUserExistsByLogin(String login);
 
-    User saveUser(User user);
+    void saveUser(User user);
 }
