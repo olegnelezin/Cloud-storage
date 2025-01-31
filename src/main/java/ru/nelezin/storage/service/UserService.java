@@ -12,7 +12,7 @@ public interface UserService {
 
     MessageResponse register(RegisterRequest request);
 
-    User getUserByLoginAndPassword(String login, String password);
+    User getUserByLogin(String login);
 
     boolean isUserExistsByLogin(String login);
 
