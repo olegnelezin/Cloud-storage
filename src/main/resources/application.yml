@@ -13,7 +13,7 @@ spring:
 minio:
   endpoint: http://localhost:9000
   user: admin
-  password: admin
+  password: password
   bucket: user-files
 logging:
   level:

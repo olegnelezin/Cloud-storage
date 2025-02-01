@@ -10,6 +10,7 @@ import ru.nelezin.storage.dto.RegisterRequest;
 import ru.nelezin.storage.dto.UserDto;
 import ru.nelezin.storage.entity.User;
 import ru.nelezin.storage.repository.UserRepository;
+import ru.nelezin.storage.service.FolderService;
 import ru.nelezin.storage.service.UserService;
 
 @Slf4j
@@ -20,6 +21,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final FolderService folderService;
 
     @Override
     public UserDto login(LoginRequest request) {
@@ -45,6 +48,7 @@ public class UserServiceImpl implements UserService {
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
                 .build();
         saveUser(user);
+        folderService.createFolder(user);
 
         return new MessageResponse("You have been registered");
     }
