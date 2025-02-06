@@ -1,10 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Домашняя страница</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .no-files {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #eef5ff;
+        }
+
+        @media (max-width: 600px) {
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Home page</h1>
+<div class="container">
+    <h1>Файлы пользователя</h1>
+
+    <div th:if="${#lists.isEmpty(files)}" class="no-files">
+        Нет файлов для отображения.
+    </div>
+
+    <table th:if="${!#lists.isEmpty(files)}">
+        <thead>
+        <tr>
+            <th>Имя файла</th>
+            <th>Расширение</th>
+            <th>Размер</th>
+            <th>Путь</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="file : ${files}">
+            <td th:text="${file.filename}">Имя файла</td>
+            <td th:text="${file.extension}">Расширение</td>
+            <td th:text="${file.size}">Размер</td>
+            <td th:text="${file.path}">Путь</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
