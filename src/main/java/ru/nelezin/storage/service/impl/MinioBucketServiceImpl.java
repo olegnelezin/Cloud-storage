@@ -5,11 +5,11 @@ import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.nelezin.storage.service.MinioService;
+import ru.nelezin.storage.service.MinioBucketService;
 
 @AllArgsConstructor
 @Service
-public class MinioServiceImpl implements MinioService {
+public class MinioBucketServiceImpl implements MinioBucketService {
 
     private final MinioClient minioClient;
 

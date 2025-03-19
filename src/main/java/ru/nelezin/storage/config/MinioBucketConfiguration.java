@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import ru.nelezin.storage.service.MinioService;
+import ru.nelezin.storage.service.MinioBucketService;
 
 @Getter
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ public class MinioBucketConfiguration {
     @Value("${minio.bucket}")
     private String bucket;
 
-    private final MinioService minioService;
+    private final MinioBucketService minioService;
 
     @PostConstruct
     public void createBucket() {

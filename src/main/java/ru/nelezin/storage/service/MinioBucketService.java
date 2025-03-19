@@ -1,6 +1,6 @@
 package ru.nelezin.storage.service;
 
-public interface MinioService {
+public interface MinioBucketService {
 
     void createBucket(String bucketName) throws Exception;
 

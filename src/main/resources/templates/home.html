@@ -2,96 +2,129 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Домашняя страница</title>
+    <title>Облачное хранилище</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #fff;
+            background-color: #f4f4f4;
             font-family: 'Roboto', sans-serif;
             color: #333;
         }
-
         .container {
             max-width: 960px;
             margin: 40px auto;
             padding: 0 20px;
         }
-
         h1 {
             text-align: center;
-            margin-bottom: 30px;
             color: #007bff;
             font-weight: 500;
         }
-
-        .no-files {
-            text-align: center;
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
             margin-top: 20px;
-            font-size: 1.1em;
+        }
+        .file-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .file-card h3 {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #007bff;
+        }
+        .file-card p {
+            font-size: 14px;
             color: #666;
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        .download-btn {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 14px;
         }
-
-        thead {
-            background-color: #007bff;
-            color: #fff;
+        .upload-area {
+            border: 2px dashed #007bff;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            border-radius: 10px;
+            background: #f9f9f9;
         }
-
-        th, td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tbody tr:hover {
-            background-color: #eef5ff;
-        }
-
-        @media (max-width: 600px) {
-            th, td {
-                padding: 10px;
-            }
+        .upload-area.dragover {
+            background: #eef5ff;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Файлы пользователя</h1>
-
+    <h1>Ваши файлы</h1>
     <div th:if="${#lists.isEmpty(files)}" class="no-files">
         Нет файлов для отображения.
     </div>
+    <div class="files-grid" th:if="${!#lists.isEmpty(files)}">
+        <div class="file-card" th:each="file : ${files}">
+            <h3 th:text="${file.filename}"></h3>
+            <p th:text="'Размер: ' + ${file.size}"></p>
+            <p th:text="'Расширение: ' + ${file.extension}"></p>
+            <a th:href="@{'/download/' + ${file.filename}}" class="download-btn">Скачать</a>
+        </div>
+    </div>
 
-    <table th:if="${!#lists.isEmpty(files)}">
-        <thead>
-        <tr>
-            <th>Имя файла</th>
-            <th>Расширение</th>
-            <th>Размер</th>
-            <th>Путь</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="file : ${files}">
-            <td th:text="${file.filename}">Имя файла</td>
-            <td th:text="${file.extension}">Расширение</td>
-            <td th:text="${file.size}">Размер</td>
-            <td th:text="${file.path}">Путь</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="upload-area" id="upload-area">
+        Перетащите файлы сюда для загрузки
+    </div>
 </div>
+<script>
+    const uploadArea = document.getElementById("upload-area");
+
+    uploadArea.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        uploadArea.classList.add("dragover");
+    });
+
+    uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+    });
+
+    uploadArea.addEventListener("drop", async (event) => {
+        event.preventDefault();
+        uploadArea.classList.remove("dragover");
+
+        const file = event.dataTransfer.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("Файл успешно загружен!");
+                location.reload(); // Обновляем страницу, чтобы показать новый файл
+            } else {
+                const errorMessage = await response.text();
+                alert("Ошибка загрузки: " + errorMessage);
+            }
+        } catch (error) {
+            alert("Ошибка соединения с сервером");
+        }
+    });
+</script>
 </body>
 </html>
