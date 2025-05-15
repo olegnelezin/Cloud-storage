@@ -2,8 +2,10 @@ package ru.nelezin.storage.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.nelezin.storage.dto.LoginRequest;
 import ru.nelezin.storage.dto.MessageResponse;
 import ru.nelezin.storage.dto.RegisterRequest;
@@ -33,6 +35,14 @@ public class UserServiceImpl implements UserService {
         return new UserDto(user.getId(), user.getLogin());
     }
 
+
+    public User getCurrentUser() {
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден: " + login));
+    }
+
+    @Transactional
     @Override
     public MessageResponse register(RegisterRequest request) {
         if (!request.getPassword().equals(request.getRepeatPassword())) {

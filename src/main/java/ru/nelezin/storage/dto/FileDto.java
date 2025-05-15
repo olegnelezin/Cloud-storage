@@ -17,5 +17,4 @@ public class FileDto {
 
     private String size;
 
-    private String path;
 }

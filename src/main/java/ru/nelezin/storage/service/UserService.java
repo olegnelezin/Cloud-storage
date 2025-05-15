@@ -8,6 +8,8 @@ import ru.nelezin.storage.entity.User;
 
 public interface UserService {
 
+    User getCurrentUser();
+
     UserDto login(LoginRequest request);
 
     MessageResponse register(RegisterRequest request);
