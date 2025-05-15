@@ -81,7 +81,7 @@ public class FileServiceImpl implements FileService {
                             .build()
             );
         } catch (Exception e) {
-            throw new RuntimeException("#");
+            throw new RuntimeException("Не удалось добавить файл");
         }
     }
 

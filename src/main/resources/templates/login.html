@@ -40,6 +40,16 @@
             color: #333;
             letter-spacing: 0.5px;
         }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            text-align: left;
+            font-size: 0.9rem;
+        }
         .form-group {
             margin-bottom: 1.25rem;
             text-align: left;
@@ -97,6 +107,10 @@
 <body>
 <div class="login-container">
     <h2>Вход</h2>
+
+    <!-- Сообщение об ошибке -->
+    <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+
     <form th:action="@{/login}" th:object="${loginRequest}" method="post">
         <div class="form-group">
             <label for="login">Логин</label>

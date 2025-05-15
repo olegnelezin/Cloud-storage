@@ -29,7 +29,7 @@ public class FolderServiceImpl implements FolderService {
                             .build()
             );
         } catch (Exception e) {
-            throw new RuntimeException("Error while creating folder for user");
+            throw new RuntimeException("Внутренняя ошибка");
         }
     }
 }

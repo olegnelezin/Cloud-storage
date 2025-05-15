@@ -11,6 +11,9 @@ import ru.nelezin.storage.dto.MessageResponse;
 import ru.nelezin.storage.dto.RegisterRequest;
 import ru.nelezin.storage.dto.UserDto;
 import ru.nelezin.storage.entity.User;
+import ru.nelezin.storage.exception.AlreadyExistsException;
+import ru.nelezin.storage.exception.NotFoundException;
+import ru.nelezin.storage.exception.PasswordNotMatchException;
 import ru.nelezin.storage.repository.UserRepository;
 import ru.nelezin.storage.service.FolderService;
 import ru.nelezin.storage.service.UserService;
@@ -30,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public UserDto login(LoginRequest request) {
         User user = getUserByLogin(request.getLogin());
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new RuntimeException("Incorrect password");
+            throw new PasswordNotMatchException("Неверный пароль");
         }
         return new UserDto(user.getId(), user.getLogin());
     }
@@ -39,18 +42,18 @@ public class UserServiceImpl implements UserService {
     public User getCurrentUser() {
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByLogin(login)
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден: " + login));
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден: " + login));
     }
 
     @Transactional
     @Override
     public MessageResponse register(RegisterRequest request) {
         if (!request.getPassword().equals(request.getRepeatPassword())) {
-            throw new RuntimeException("#");
+            throw new PasswordNotMatchException("Пароли не совпадают");
         }
 
         if (isUserExistsByLogin(request.getLogin())) {
-            throw new RuntimeException("#");
+            throw new AlreadyExistsException("Пользователь с таким логином уже существует");
         }
 
         User user = User.builder()
@@ -66,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByLogin(String login) {
         return userRepository.findByLogin(login).orElseThrow(
-                () -> new RuntimeException("User does not exists"));
+                () -> new NotFoundException("Пользователь с таким логином не найден"));
     }
 
     @Override
