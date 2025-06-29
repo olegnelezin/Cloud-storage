@@ -1,13 +1,17 @@
 package ru.nelezin.storage.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.nelezin.storage.dto.LoginRequest;
 import ru.nelezin.storage.dto.RegisterRequest;
+import ru.nelezin.storage.exception.AlreadyExistsException;
+import ru.nelezin.storage.exception.PasswordNotMatchException;
 import ru.nelezin.storage.service.UserService;
 
 @RequiredArgsConstructor
@@ -28,9 +32,27 @@ public class UserController {
         return "register";
     }
 
+
     @PostMapping("/register")
-    public String register(@ModelAttribute RegisterRequest request) {
-        userService.register(request);
+    public String register(
+            @Valid @ModelAttribute("registerRequest") RegisterRequest request,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+
+        try {
+            userService.register(request);
+        } catch (PasswordNotMatchException ex) {
+            bindingResult.rejectValue("repeatPassword", "password.mismatch", ex.getMessage());
+            return "register";
+        } catch (AlreadyExistsException ex) {
+            bindingResult.rejectValue("login", "login.exists", ex.getMessage());
+            return "register";
+        }
+
         return "redirect:/login";
     }
 }

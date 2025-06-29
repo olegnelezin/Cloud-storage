@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Builder
@@ -30,4 +32,17 @@ public class User {
 
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
+
+    @Column(name = "change_password_date")
+    private LocalDate changePasswordDate;
+
+    @Column(name = "created_at")
+    private LocalDate createdAt;
+
+    @Column(name = "files_count")
+    private Long filesCount;
+
+    @Column(name = "size")
+    private Double size;
 }
+

@@ -80,6 +80,11 @@
       background: #0056b3;
       transform: translateY(-2px);
     }
+    .error {
+      color: #dc3545;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
     .login-btn {
       display: inline-block;
       margin-top: 1rem;
@@ -97,19 +102,30 @@
 <body>
 <div class="register-container">
   <h2>Регистрация</h2>
-  <form th:action="@{/register}" th:object="${registerRequest}" method="post">
+  <form th:action="@{/register}"
+        th:object="${registerRequest}"
+        method="post">
+    <!-- Логин -->
     <div class="form-group">
       <label for="login">Логин</label>
       <input type="text" id="login" th:field="*{login}" required>
+      <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="error"></div>
     </div>
+
+    <!-- Пароль -->
     <div class="form-group">
       <label for="password">Пароль</label>
       <input type="password" id="password" th:field="*{password}" required>
+      <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
     </div>
+
+    <!-- Повтор пароля -->
     <div class="form-group">
       <label for="repeatPassword">Повторите пароль</label>
       <input type="password" id="repeatPassword" th:field="*{repeatPassword}" required>
+      <div th:if="${#fields.hasErrors('repeatPassword')}" th:errors="*{repeatPassword}" class="error"></div>
     </div>
+
     <button type="submit" class="btn">Зарегистрироваться</button>
   </form>
   <a th:href="@{/login}" class="login-btn">Уже есть аккаунт? Войти</a>

@@ -54,11 +54,13 @@ public class FileServiceImpl implements FileService {
                 } else {
                     filename = fileNameWithExt;
                 }
-                String size = String.valueOf( item.size() / 1024) + "Kb";
+                long bytes = item.size();
+                String human = (bytes / 1024) + "Kb";
                 files.add(new FileDto(
                         filename,
                         extension,
-                        size
+                        human,
+                        bytes
                 ));
             }
             if (!files.isEmpty()) {

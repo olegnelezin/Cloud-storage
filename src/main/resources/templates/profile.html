@@ -60,14 +60,16 @@
     <h2>Профиль пользователя</h2>
     <div class="profile-info">
         <p><strong>Логин:</strong> <span th:text="${user.login}"></span></p>
-        <p><strong>Дата регистрации:</strong> <span th:text="${user.login}"></span></p>
-        <p><strong>Дата изменения пароля:</strong> <span th:text="${user.login}"></span></p>
-        <p><strong>Количество файлов:</strong> <span th:text="${user.login}"></span></p>
-        <p><strong>Общий объём файлов:</strong> <span th:text="${user.login}"></span></p>
+        <p><strong>Дата регистрации:</strong> <span th:text="${user.createdAt}"></span></p>
+        <p><strong>Дата изменения пароля:</strong> <span th:text="${user.changePasswordDate}"></span></p>
+        <p><strong>Количество файлов:</strong> <span th:text="${user.filesCount}"></span></p>
+        <p><strong>Общий объём файлов:</strong> <span th:text="${user.size}"></span></p>
     </div>
     <div class="actions">
         <a href="/change-password" class="btn">Изменить пароль</a>
         <a href="/" class="btn" style="background: #6c757d;">Назад</a>
+        <!-- Кнопка выхода -->
+        <a href="/logout" class="btn" style="background: #dc3545;">Выйти</a>
     </div>
 </div>
 </body>

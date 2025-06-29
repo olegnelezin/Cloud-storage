@@ -17,4 +17,5 @@ public class FileDto {
 
     private String size;
 
+    private long sizeInBytes;
 }
